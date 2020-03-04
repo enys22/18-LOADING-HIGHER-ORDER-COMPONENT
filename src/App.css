@@ -1,0 +1,25 @@
+.App {
+  text-align: center;
+}
+.header{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.rating{
+  margin-left: 10px;
+}
+.rating p{
+  margin-bottom: 5px;
+}
+.inputText{
+  width: 400px;
+  height: 30px;
+  border: 2px solid black;
+}
+.inputBtn{
+  height: 36px;
+  margin-left: -20px;
+  background-color: white;
+  border: 2px solid black;
+}
