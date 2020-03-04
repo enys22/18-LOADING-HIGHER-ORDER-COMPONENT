@@ -2,6 +2,9 @@ import './App.css';
 import React, { Component } from 'react'
 import MovieList from './componants/MovieList'
 import RatingStars from './componants/RatingStars'
+import WithLoading from './HOC/WithLoading'
+
+const ListWithLoading = WithLoading(MovieList)
 
 class App extends Component {
   state = {
@@ -23,14 +26,24 @@ class App extends Component {
       text: '',
       rating: 0
     },
-    result: []
+    result: [],
+    isLoading : true
   }
 
   handleSearchChange = (e) => {
     this.setState({ search: { ...this.state.search, text: e.target.value } })
   }
   searchMovie = () => {
-      return this.state.movies.filter(el => ( (el.title.indexOf(this.state.search.text) !== -1 || el.synopsis.indexOf(this.state.search.text) !== -1 || el.actors.indexOf(this.state.search.text) !== -1) && (el.rating >= this.state.search.rating) ) )
+      //this.setLoading(true)
+      return this.state.movies.filter(el => ( 
+        (
+          el.title.indexOf(this.state.search.text) !== -1 || 
+          el.synopsis.indexOf(this.state.search.text) !== -1 || 
+          el.actors.indexOf(this.state.search.text) !== -1 
+          ) 
+        && (el.rating >= this.state.search.rating) 
+        )/*,this.setLoading(false)*/ )
+      
     }
   searchRating = (rat) => {
     this.setState({ search: { ...this.state.search, rating: rat } }  );
@@ -38,6 +51,14 @@ class App extends Component {
   }
   addMovie = (newMovie) =>{
     this.setState({ movies: [...this.state.movies,newMovie] })
+  }
+  setLoading=(isIt)=>{
+    this.setState({ isLoading: isIt });
+  }
+
+  componentDidMount(){
+    //this.setLoading(true)
+    setTimeout(()=> this.setLoading(false), 3000);
   }
 
 
@@ -58,7 +79,7 @@ class App extends Component {
         </div>
 
         <h3>{this.state.result.length || this.state.search.rating ? `Result for movies ${this.state.search.text} with minimum ${this.state.search.rating} stars rating` : "Newest movie"}</h3>
-        <MovieList movieList={this.searchMovie()} saveMovie={this.addMovie} />
+        <ListWithLoading movieList={this.searchMovie()} saveMovie={this.addMovie} setLoading={this.setLoading} isLoading={this.state.isLoading}/>
       </div>
     )
   }
